@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FreyTube</string>
+    <string name="app_description">Ad-Free YouTube Client</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="downloads">Downloads</string>
+    <string name="settings">Settings</string>
+    <string name="trending">Trending</string>
+    <string name="search_hint">Search videos, channels...</string>
+    <string name="no_results">No results found</string>
+    <string name="loading">Loading...</string>
+    <string name="error">An error occurred</string>
+    <string name="retry">Retry</string>
+    <string name="background_play">Background Play</string>
+    <string name="download">Download</string>
+    <string name="quality">Quality</string>
+    <string name="speed">Speed</string>
+    <string name="related_videos">Related Videos</string>
+    <string name="comments">Comments</string>
+    <string name="description">Description</string>
+    <string name="no_downloads">No downloads yet</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_failed">Download failed</string>
+    <string name="delete_download">Delete download?</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+</resources>

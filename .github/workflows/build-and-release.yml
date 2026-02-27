@@ -1,0 +1,161 @@
+name: Build & Release FreyTube APK
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  KEYSTORE_PASSWORD: freytube2026
+  KEY_ALIAS: freytube
+  KEY_PASSWORD: freytube2026
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: 🔑 Generate Signing Keystore
+        run: |
+          mkdir -p keystore
+          keytool -genkeypair \
+            -v \
+            -storetype PKCS12 \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass ${{ env.KEYSTORE_PASSWORD }} \
+            -keypass ${{ env.KEY_PASSWORD }} \
+            -alias ${{ env.KEY_ALIAS }} \
+            -keystore keystore/freytube-release.jks \
+            -dname "CN=FreyTube, OU=FreyTube, O=FreyTube, L=Internet, ST=Open, C=US"
+
+      - name: 📦 Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: 🔧 Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: 🏗️ Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: 🏗️ Build Release APK
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+        env:
+          KEYSTORE_PASSWORD: ${{ env.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ env.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ env.KEY_PASSWORD }}
+
+      - name: ✅ Verify APK is signed
+        run: |
+          echo "=== Checking APK signature ==="
+          $ANDROID_HOME/build-tools/34.0.0/apksigner verify --verbose app/build/outputs/apk/release/app-release.apk || true
+          echo "=== APK info ==="
+          ls -la app/build/outputs/apk/release/
+
+      - name: 📤 Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreyTube-Debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: 📤 Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreyTube-Release
+          path: app/build/outputs/apk/release/app-release.apk
+          retention-days: 90
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download Release APK
+        uses: actions/download-artifact@v4
+        with:
+          name: FreyTube-Release
+          path: ./release-apk/
+
+      - name: 📥 Download Debug APK
+        uses: actions/download-artifact@v4
+        with:
+          name: FreyTube-Debug
+          path: ./debug-apk/
+
+      - name: 📝 Get version
+        id: version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "version=v1.0.0-$(date +%Y%m%d%H%M%S)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🏷️ Rename APKs
+        run: |
+          mv release-apk/app-release.apk release-apk/FreyTube-${{ steps.version.outputs.version }}-release.apk
+          mv debug-apk/app-debug.apk debug-apk/FreyTube-${{ steps.version.outputs.version }}-debug.apk
+
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: "FreyTube ${{ steps.version.outputs.version }}"
+          body: |
+            ## 🎉 FreyTube ${{ steps.version.outputs.version }}
+
+            ### Ad-Free YouTube Client for Android
+
+            #### ✨ Features
+            - 🚫 **100% Ad-Free** - No ads, no interruptions
+            - 🎵 **Background Play** - Listen with screen off
+            - 📥 **Video Downloads** - Save videos offline (up to 8K)
+            - 🎬 **High Resolution** - Support for 4K/8K playback
+            - ⏩ **Playback Speed** - 0.25x to 3.0x
+            - 🔍 **Search** - Full video search with suggestions
+            - 📺 **Channel Pages** - Browse channel content
+            - 💬 **Comments** - Read video comments
+            - 🌙 **Dark Mode** - Easy on the eyes
+            - 🛡️ **Privacy First** - No tracking, no data collection
+
+            #### 📱 Installation
+            1. Download `FreyTube-${{ steps.version.outputs.version }}-release.apk`
+            2. Enable "Install from Unknown Sources" in Settings
+            3. Open the APK and install
+            4. Enjoy ad-free YouTube! 🎉
+
+            #### ⚙️ Requirements
+            - Android 8.0 (Oreo) or higher
+            - Internet connection
+
+            ---
+            *Powered by Piped API • Open Source*
+          draft: false
+          prerelease: false
+          files: |
+            release-apk/FreyTube-${{ steps.version.outputs.version }}-release.apk
+            debug-apk/FreyTube-${{ steps.version.outputs.version }}-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
