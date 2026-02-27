@@ -143,7 +143,7 @@ fun ChannelScreen(
                                     .padding(8.dp)
                             ) {
                                 Icon(
-                                    Icons.Filled.ArrowBack,
+                                    Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = "Back",
                                     tint = Color.White
                                 )

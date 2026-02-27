@@ -98,7 +98,7 @@ fun PlayerScreen(
                     .padding(8.dp)
             ) {
                 Icon(
-                    Icons.Filled.ArrowBack,
+                    Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
                     tint = Color.White,
                     modifier = Modifier
@@ -153,7 +153,7 @@ fun PlayerScreen(
             }
         }
 
-        Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
 
         // Video info + related videos
         LazyColumn(
@@ -280,7 +280,7 @@ fun PlayerScreen(
                             )
                         }
                     }
-                    Divider(
+                    HorizontalDivider(
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -318,7 +318,7 @@ fun PlayerScreen(
                             )
                         }
                     }
-                    Divider(
+                    HorizontalDivider(
                         color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -412,7 +412,7 @@ fun PlayerScreen(
                 // Related Videos
                 if (uiState.relatedVideos.isNotEmpty()) {
                     item {
-                        Divider(
+                        HorizontalDivider(
                             color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                         )

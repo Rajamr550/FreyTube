@@ -46,26 +46,28 @@ jobs:
 
       - name: 📦 Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-
-      - name: 🔧 Grant execute permission for gradlew
-        run: chmod +x gradlew
+        with:
+          gradle-version: '8.5'
 
       - name: 🏗️ Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: 🏗️ Build Release APK
-        run: ./gradlew assembleRelease --no-daemon --stacktrace
+        run: gradle assembleRelease --no-daemon --stacktrace
         env:
           KEYSTORE_PASSWORD: ${{ env.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ env.KEY_ALIAS }}
           KEY_PASSWORD: ${{ env.KEY_PASSWORD }}
 
-      - name: ✅ Verify APK is signed
+      - name: ✅ Verify APK exists
         run: |
+          echo "=== Debug APK ==="
+          ls -la app/build/outputs/apk/debug/ || true
+          echo "=== Release APK ==="
+          ls -la app/build/outputs/apk/release/ || true
           echo "=== Checking APK signature ==="
-          $ANDROID_HOME/build-tools/34.0.0/apksigner verify --verbose app/build/outputs/apk/release/app-release.apk || true
-          echo "=== APK info ==="
-          ls -la app/build/outputs/apk/release/
+          BUILD_TOOLS_VERSION=$(ls $ANDROID_HOME/build-tools/ | sort -V | tail -1)
+          $ANDROID_HOME/build-tools/$BUILD_TOOLS_VERSION/apksigner verify --verbose app/build/outputs/apk/release/app-release.apk || true
 
       - name: 📤 Upload Debug APK
         uses: actions/upload-artifact@v4
