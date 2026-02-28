@@ -16,4 +16,11 @@ local.properties
 !keystore/
 /keystore/*.jks
 *.log
+build_log*.txt
+build_output*.txt
+build_result*.txt
+fresh_build.txt
+apk_build_result.txt
+run_build*.bat
+run_apk_build.bat
 .env
