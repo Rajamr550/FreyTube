@@ -8,6 +8,11 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import com.freytube.app.data.api.InstanceManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class FreyTubeApp : Application(), ImageLoaderFactory {
 
@@ -18,10 +23,28 @@ class FreyTubeApp : Application(), ImageLoaderFactory {
             private set
     }
 
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onCreate() {
         super.onCreate()
         instance = this
         createNotificationChannels()
+        initializeInstances()
+    }
+
+    /**
+     * Fetch live Piped & Invidious instance lists in the background.
+     * This runs once and populates InstanceManager so that failover
+     * has a fresh list of healthy instances to rotate through.
+     */
+    private fun initializeInstances() {
+        appScope.launch {
+            try {
+                InstanceManager.refreshInstances()
+            } catch (_: Exception) {
+                // Defaults are already loaded — non-fatal
+            }
+        }
     }
 
     private fun createNotificationChannels() {

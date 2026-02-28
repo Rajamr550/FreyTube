@@ -31,6 +31,10 @@
 # Keep data models
 -keep class com.freytube.app.data.model.** { *; }
 
+# Keep Invidious API response classes (defined in InvidiousApi.kt)
+-keep class com.freytube.app.data.api.Invidious** { *; }
+-keep class com.freytube.app.data.api.InstanceManager** { *; }
+
 # Keep Room
 -keep class * extends androidx.room.RoomDatabase
 -keep @androidx.room.Entity class *
