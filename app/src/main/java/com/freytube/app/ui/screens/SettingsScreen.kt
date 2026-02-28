@@ -149,14 +149,14 @@ fun SettingsScreen() {
             // Ad Blocking Section
             // ═══════════════════════════════════════════
             item {
-                SettingsSection(title = "Ad Blocking & Privacy")
+                SettingsSection(title = "Content & Privacy")
             }
 
             item {
                 SettingsItem(
-                    icon = Icons.Outlined.Block,
-                    title = "Ad Blocking",
-                    subtitle = "Always enabled — Uses Piped API (no ads)",
+                    icon = Icons.Outlined.Shield,
+                    title = "Privacy Mode",
+                    subtitle = "Content served via privacy-respecting APIs",
                     onClick = {}
                 )
             }
@@ -243,7 +243,7 @@ fun SettingsScreen() {
                 SettingsItem(
                     icon = Icons.Outlined.Info,
                     title = "FreyTube",
-                    subtitle = "Version 1.0.0 • Open Source • Ad-Free YouTube Client",
+                    subtitle = "Version 1.0.0 • Open Source Video Client",
                     onClick = {}
                 )
             }
@@ -288,7 +288,7 @@ fun SettingsScreen() {
                             color = Primary
                         )
                         Text(
-                            text = "Ad-free • Background Play • Downloads • Open Source",
+                            text = "Background Play • Downloads • Open Source",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

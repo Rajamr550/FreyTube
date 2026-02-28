@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FreyTube</string>
-    <string name="app_description">Ad-Free YouTube Client</string>
+    <string name="app_description">Open Source Video Client</string>
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="downloads">Downloads</string>

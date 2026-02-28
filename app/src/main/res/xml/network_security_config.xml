@@ -5,8 +5,4 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">pipedapi.kavin.rocks</domain>
-        <domain includeSubdomains="true">piped-instances.kavin.rocks</domain>
-    </domain-config>
 </network-security-config>

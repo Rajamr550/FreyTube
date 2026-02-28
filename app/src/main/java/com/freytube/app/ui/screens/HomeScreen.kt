@@ -73,7 +73,7 @@ fun HomeScreen(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "Ad-Free • Open Source",
+                            text = "Open Source Video Client",
                             style = MaterialTheme.typography.bodySmall,
                             color = TextWhite.copy(alpha = 0.8f)
                         )

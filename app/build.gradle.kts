@@ -23,9 +23,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file("../keystore/freytube-release.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "freytube2026"
-            keyAlias = System.getenv("KEY_ALIAS") ?: "freytube"
-            keyPassword = System.getenv("KEY_PASSWORD") ?: "freytube2026"
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+            keyAlias = System.getenv("KEY_ALIAS") ?: ""
+            keyPassword = System.getenv("KEY_PASSWORD") ?: ""
         }
     }
 
@@ -41,7 +41,6 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            applicationIdSuffix = ".debug"
             isDebuggable = true
         }
     }

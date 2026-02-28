@@ -42,19 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Handle YouTube URLs -->
-            <intent-filter android:autoVerify="false">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" />
-                <data android:host="www.youtube.com" />
-                <data android:host="youtube.com" />
-                <data android:host="m.youtube.com" />
-                <data android:host="youtu.be" />
-                <data android:pathPrefix="/watch" />
-                <data android:pathPrefix="/shorts" />
-            </intent-filter>
+
         </activity>
 
         <!-- Background Playback Service -->

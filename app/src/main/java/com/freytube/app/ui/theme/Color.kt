@@ -2,7 +2,7 @@ package com.freytube.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Primary - Deep Red (YouTube-inspired but unique)
+// Primary - Deep Red
 val PrimaryDark = Color(0xFFE53935)
 val Primary = Color(0xFFFF1744)
 val PrimaryLight = Color(0xFFFF5252)
